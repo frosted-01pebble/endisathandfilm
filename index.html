@@ -116,10 +116,10 @@ const SECTIONS = {
 };
 
 const NAV = [
-  { id: 'film',    label: 'About the Film', isEye: true,  glyph: null },
-  { id: 'team',    label: 'Meet the Team',  isEye: false, glyph: '⋆⋆⋆⋆⋆' },
-  { id: 'feature', label: 'The Feature',    isEye: false, glyph: '↗' },
-  { id: 'connect', label: 'Contact',        isEye: false, glyph: '@' },
+  { id: 'film',    label: 'About the Film', isEye: true,  isTeam: false, isArrow: false, isGlyph: false, glyph: null },
+  { id: 'team',    label: 'Meet the Team',  isEye: false, isTeam: true,  isArrow: false, isGlyph: false, glyph: '⋆⋆⋆⋆⋆' },
+  { id: 'feature', label: 'The Feature',    isEye: false, isTeam: false, isArrow: true,  isGlyph: false, glyph: '↗' },
+  { id: 'connect', label: 'Contact',        isEye: false, isTeam: false, isArrow: false, isGlyph: true,  glyph: '@' },
 ];
 
 /* ── HELPERS ──────────────────────────────────────────── */
@@ -136,12 +136,23 @@ function formatCountdown(ms) {
   return `${pad2(Math.floor(tot / 86400))}d ${pad2(Math.floor((tot % 86400) / 3600))}h ${pad2(Math.floor((tot % 3600) / 60))}m ${pad2(tot % 60)}s`;
 }
 
-/* ── EYE ICON ─────────────────────────────────────────── */
+/* ── NAV ICONS ────────────────────────────────────────── */
 function EyeIcon() {
   return (
     <svg width="22" height="13" viewBox="0 0 24 14" aria-hidden="true">
       <path d="M1 7 C5 1,19 1,23 7 C19 13,5 13,1 7 Z" fill="none" stroke="#7cc6df" strokeWidth="1.5"/>
       <circle cx="12" cy="7" r="3" fill="#7cc6df"/>
+    </svg>
+  );
+}
+function TeamIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="4" r="1.9" fill="#7cc6df"/>
+      <circle cx="19.6" cy="9.53" r="1.9" fill="#7cc6df"/>
+      <circle cx="16.7" cy="18.47" r="1.9" fill="#7cc6df"/>
+      <circle cx="7.3" cy="18.47" r="1.9" fill="#7cc6df"/>
+      <circle cx="4.39" cy="9.53" r="1.9" fill="#7cc6df"/>
     </svg>
   );
 }
@@ -316,16 +327,20 @@ function App() {
 
   /* layout geometry */
   const ease = 'cubic-bezier(0.22,0.61,0.36,1)';
+  const trans = `left 0.6s ${ease}, transform 0.6s ${ease}`;
   let stageStyle, phoneWrapStyle, panelStyle;
   if (narrow) {
-    stageStyle    = { position: 'relative', width: '100%', maxWidth: '360px', margin: '0 auto', height: open ? '900px' : '648px', transition: `height 0.5s ${ease}` };
-    phoneWrapStyle= { position: 'absolute', top: 0, left: '50%', transformOrigin: 'top center', transition: `left 0.6s ${ease},transform 0.6s ${ease}`, transform: open ? 'translateX(-50%) scale(0.56)' : 'translateX(-50%) scale(1)' };
-    panelStyle    = { position: 'absolute', left: 0, right: 0, top: open ? '388px' : '420px', bottom: 0, transition: `opacity 0.5s ${ease},transform 0.5s ${ease}`, opacity: open ? 1 : 0, transform: open ? 'translateY(0)' : 'translateY(24px)', pointerEvents: open ? 'auto' : 'none' };
+    stageStyle    = { position: 'relative', width: '100%', maxWidth: open ? '460px' : '360px', margin: '0 auto', height: open ? 'min(82vh, 760px)' : '648px', minHeight: open ? '520px' : '0', transition: `height 0.5s ${ease}` };
+    phoneWrapStyle= { position: 'absolute', top: 0, left: '50%', transformOrigin: 'top center', transition: `${trans}, opacity 0.4s ${ease}`, transform: open ? 'translateX(-50%) scale(0.82)' : 'translateX(-50%) scale(1)', opacity: open ? 0 : 1, pointerEvents: open ? 'none' : 'auto' };
+    panelStyle    = { position: 'absolute', inset: 0, transition: `opacity 0.5s ${ease}, transform 0.5s ${ease}`, opacity: open ? 1 : 0, transform: open ? 'translateY(0)' : 'translateY(24px)', pointerEvents: open ? 'auto' : 'none' };
   } else {
     stageStyle    = { position: 'relative', width: '100%', maxWidth: '1060px', margin: '0 auto', height: '648px' };
-    phoneWrapStyle= { position: 'absolute', top: 0, transformOrigin: 'top left', transition: `left 0.6s ${ease},transform 0.6s ${ease}`, left: open ? '8px' : '50%', transform: open ? 'translateX(0) scale(0.78)' : 'translateX(-50%) scale(1)' };
-    panelStyle    = { position: 'absolute', top: 0, left: '296px', right: 0, height: '648px', transition: `opacity 0.55s ${ease},transform 0.55s ${ease}`, opacity: open ? 1 : 0, transform: open ? 'translateX(0)' : 'translateX(30px)', pointerEvents: open ? 'auto' : 'none' };
+    phoneWrapStyle= { position: 'absolute', top: 0, transformOrigin: 'top left', transition: trans, left: open ? '8px' : '50%', transform: open ? 'translateX(0) scale(0.78)' : 'translateX(-50%) scale(1)' };
+    panelStyle    = { position: 'absolute', top: 0, left: '296px', right: 0, height: '648px', transition: `opacity 0.55s ${ease}, transform 0.55s ${ease}`, opacity: open ? 1 : 0, transform: open ? 'translateX(0)' : 'translateX(30px)', pointerEvents: open ? 'auto' : 'none' };
   }
+
+  const mediaOnPhone = !!media && !narrow;
+  const mediaOnFull  = !!media && narrow;
 
   return (
     <div style={{ minHeight: '100vh', background: '#000', color: '#cfe2ea', fontFamily: "'Montserrat',sans-serif", display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '42px 20px 48px', position: 'relative', overflowX: 'hidden' }}>
@@ -348,13 +363,13 @@ function App() {
           <div style={{ position: 'absolute', left: '50%', top: '46%', transform: 'translate(-50%,-50%)', width: '420px', height: '560px', background: 'radial-gradient(50% 50% at 50% 50%,rgba(80,175,205,.22),transparent 70%)', filter: 'blur(8px)', animation: 'teiahHalo 6s ease-in-out infinite', pointerEvents: 'none' }} />
 
           {/* phone body */}
-          <div style={{ position: 'relative', width: '308px', height: '638px', borderRadius: '48px', background: '#050709', border: '1px solid rgba(140,205,218,.22)', boxShadow: '0 0 0 1px rgba(0,0,0,.7),0 30px 80px rgba(0,0,0,.8),0 0 70px 4px rgba(80,170,200,.16),inset 0 1.5px 0 rgba(155,218,232,.3),inset 0 0 0 1px rgba(120,195,210,.05)', overflow: 'hidden', transition: 'transform 0.6s cubic-bezier(0.7,0,0.3,1)', transform: media ? 'rotate(90deg)' : 'none' }}>
+          <div style={{ position: 'relative', width: '308px', height: '638px', borderRadius: '48px', background: '#050709', border: '1px solid rgba(140,205,218,.22)', boxShadow: '0 0 0 1px rgba(0,0,0,.7),0 30px 80px rgba(0,0,0,.8),0 0 70px 4px rgba(80,170,200,.16),inset 0 1.5px 0 rgba(155,218,232,.3),inset 0 0 0 1px rgba(120,195,210,.05)', overflow: 'hidden', transition: 'transform 0.6s cubic-bezier(0.7,0,0.3,1)', transform: mediaOnPhone ? 'rotate(90deg)' : 'none' }}>
 
             {/* screen inset */}
             <div style={{ position: 'absolute', inset: '7px', borderRadius: '42px', overflow: 'hidden', background: '#000', zIndex: 1 }}>
 
-              {/* media overlay */}
-              {media && (
+              {/* media overlay (desktop only — phone rotates to landscape) */}
+              {mediaOnPhone && (
                 <div style={{ position: 'absolute', inset: 0, background: '#000', zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <div style={{ transform: 'rotate(-90deg)', width: '624px', height: '294px', position: 'relative', background: '#000', flexShrink: 0 }}>
                     {media === 'trailer' && (
@@ -407,7 +422,10 @@ function App() {
                     return (
                       <button key={item.id} onClick={() => openSection(item.id)} style={{ display: 'flex', alignItems: 'center', gap: '11px', borderRadius: '16px', cursor: 'pointer', padding: '11px 12px', textAlign: 'left', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', transition: 'border-color .3s,background .3s', background: on ? 'rgba(108,184,212,.13)' : 'rgba(10,16,20,.62)', border: on ? '1px solid rgba(124,198,223,.42)' : '1px solid rgba(140,190,210,.16)', boxShadow: 'none', opacity: on ? .92 : 1 }}>
                         <span style={{ width: '34px', height: '34px', flexShrink: 0, borderRadius: '9px', background: 'rgba(108,184,212,.12)', border: '1px solid rgba(108,184,212,.32)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', color: '#7cc6df' }}>
-                          {item.isEye ? <EyeIcon /> : item.glyph}
+                          {item.isEye && <EyeIcon />}
+                          {item.isTeam && <TeamIcon />}
+                          {item.isArrow && <span style={{ fontSize: '21px', lineHeight: 1, color: '#7cc6df' }}>↗</span>}
+                          {item.isGlyph && item.glyph}
                         </span>
                         <span style={{ flex: 1, minWidth: 0 }}>
                           <span style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
@@ -460,6 +478,33 @@ function App() {
 
       </div>{/* /stage */}
 
+      {/* full-screen media overlay (mobile only) */}
+      {mediaOnFull && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 90, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          {media === 'trailer' && (
+            <div style={{ position: 'relative', width: '100%', maxWidth: '760px', aspectRatio: '16/9' }}>
+              <iframe
+                src="https://player.vimeo.com/video/1099239237?badge=0&autopause=0&autoplay=1&player_id=0&app_id=58479"
+                allow="autoplay; fullscreen; picture-in-picture"
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 0, display: 'block' }}
+                title="THE END IS AT HAND | Teaser Trailer"
+              />
+            </div>
+          )}
+          {media === 'stills' && (
+            <div style={{ position: 'absolute', inset: 0 }}>
+              <div style={{ position: 'absolute', inset: 0, backgroundImage: `url("${STILLS[stillIdx]}")`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center' }} />
+              <div onClick={nextStill} style={{ position: 'absolute', inset: 0, cursor: 'pointer', zIndex: 1 }} />
+              <div onClick={prevStill} style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '32%', cursor: 'pointer', zIndex: 2 }} />
+              <div style={{ position: 'absolute', left: 0, right: 0, bottom: 'max(20px, env(safe-area-inset-bottom))', display: 'flex', justifyContent: 'center', gap: '8px', zIndex: 4, pointerEvents: 'none' }}>
+                {STILLS.map((_, i) => <span key={i} style={{ width: '6px', height: '6px', borderRadius: '50%', background: i === stillIdx ? '#7cc6df' : 'rgba(200,222,230,.35)', display: 'inline-block' }} />)}
+              </div>
+            </div>
+          )}
+          <div onClick={closeMedia} style={{ position: 'absolute', top: 'max(16px, env(safe-area-inset-top))', right: '16px', width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(0,0,0,.6)', border: '1px solid rgba(200,222,230,.3)', color: '#cfe2ea', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '17px', cursor: 'pointer', zIndex: 5 }}>✕</div>
+        </div>
+      )}
+
       {/* tagline */}
       <div style={{ marginTop: 'clamp(30px,5vh,46px)', fontWeight: 500, fontSize: 'clamp(11px,1.5vw,14px)', letterSpacing: '.18em', textTransform: 'uppercase', color: '#6cb8d4', textAlign: 'center', textShadow: '0 0 18px rgba(108,184,212,.4)' }}>
         <span style={{ whiteSpace: 'nowrap' }}>It&rsquo;s not on your screen.</span>{' '}
@@ -474,7 +519,7 @@ function App() {
           <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', height: '84px' }}>
             <img src="project/assets/laurel-fantasia.png" alt="Fantasia 2026 — Official Selection" style={{ height: '48px', width: 'auto', opacity: .9, display: 'block' }} />
             {countdownOn && (
-              <div style={{ position: 'absolute', inset: '-2px -24px', background: '#f4f1ea', borderRadius: '3px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '5px', padding: '8px 16px', boxShadow: '0 3px 16px rgba(0,0,0,.45)' }}>
+              <div style={{ position: 'absolute', inset: narrow ? '-2px 0' : '-2px -24px', background: '#f4f1ea', borderRadius: '3px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '5px', padding: narrow ? '8px 10px' : '8px 16px', boxShadow: '0 3px 16px rgba(0,0,0,.45)' }}>
                 <div style={{ fontWeight: 600, fontSize: '7px', letterSpacing: '.2em', textTransform: 'uppercase', color: '#5a6b73', textAlign: 'center', lineHeight: 1.5 }}>Special Announcement<br/>Coming Soon</div>
                 <div style={{ fontWeight: 700, fontSize: '13px', letterSpacing: '.05em', color: '#0d141a', fontVariantNumeric: 'tabular-nums' }}>{countdown}</div>
               </div>
@@ -485,31 +530,38 @@ function App() {
       </div>
 
       {/* billing block */}
-      <div style={{ marginTop: 'clamp(34px,6vh,54px)', maxWidth: '880px', width: '100%', display: 'flex', flexDirection: 'column', gap: '7px', alignItems: 'center' }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'baseline', gap: '4px 7px', lineHeight: 1.5 }}>
-          <span style={{ fontWeight: 600, fontSize: '9px', letterSpacing: '.12em', textTransform: 'uppercase', color: 'rgba(216,233,239,.72)' }}>AFI Conservatory</span>
-          <span style={{ fontWeight: 500, fontSize: '7.5px', letterSpacing: '.16em', textTransform: 'uppercase', color: 'rgba(190,210,218,.42)' }}>presents</span>
-          <span style={{ fontWeight: 600, fontSize: '9px', letterSpacing: '.12em', textTransform: 'uppercase', color: 'rgba(216,233,239,.72)' }}>&ldquo;The End Is At Hand&rdquo;</span>
-          <span style={{ fontWeight: 500, fontSize: '7.5px', letterSpacing: '.16em', textTransform: 'uppercase', color: 'rgba(190,210,218,.42)' }}>starring</span>
-          <span style={{ fontWeight: 600, fontSize: '9px', letterSpacing: '.12em', textTransform: 'uppercase', color: 'rgba(216,233,239,.72)' }}>Efren Ramirez &middot; Richard Kind</span>
-        </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'baseline', gap: '4px 7px', lineHeight: 1.5 }}>
-          <span style={{ fontWeight: 500, fontSize: '7.5px', letterSpacing: '.16em', textTransform: 'uppercase', color: 'rgba(190,210,218,.42)' }}>Music by</span>
-          <span style={{ fontWeight: 600, fontSize: '9px', letterSpacing: '.12em', textTransform: 'uppercase', color: 'rgba(216,233,239,.66)' }}>Alain Emile</span>
-          <span style={{ fontWeight: 500, fontSize: '7.5px', letterSpacing: '.16em', textTransform: 'uppercase', color: 'rgba(190,210,218,.42)' }}>Edited by</span>
-          <span style={{ fontWeight: 600, fontSize: '9px', letterSpacing: '.12em', textTransform: 'uppercase', color: 'rgba(216,233,239,.66)' }}>Junwu Tan</span>
-          <span style={{ fontWeight: 500, fontSize: '7.5px', letterSpacing: '.16em', textTransform: 'uppercase', color: 'rgba(190,210,218,.42)' }}>Production Design by</span>
-          <span style={{ fontWeight: 600, fontSize: '9px', letterSpacing: '.12em', textTransform: 'uppercase', color: 'rgba(216,233,239,.66)' }}>Yuheng Kuang</span>
-          <span style={{ fontWeight: 500, fontSize: '7.5px', letterSpacing: '.16em', textTransform: 'uppercase', color: 'rgba(190,210,218,.42)' }}>Cinematography by</span>
-          <span style={{ fontWeight: 600, fontSize: '9px', letterSpacing: '.12em', textTransform: 'uppercase', color: 'rgba(216,233,239,.66)' }}>Diana Dahllund</span>
-        </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'baseline', gap: '4px 7px', lineHeight: 1.5 }}>
-          <span style={{ fontWeight: 500, fontSize: '7.5px', letterSpacing: '.16em', textTransform: 'uppercase', color: 'rgba(190,210,218,.42)' }}>Written &amp; Produced by</span>
-          <span style={{ fontWeight: 600, fontSize: '9px', letterSpacing: '.12em', textTransform: 'uppercase', color: 'rgba(216,233,239,.66)' }}>Sam Gallen</span>
-          <span style={{ fontWeight: 500, fontSize: '7.5px', letterSpacing: '.16em', textTransform: 'uppercase', color: 'rgba(190,210,218,.42)' }}>Directed by</span>
-          <span style={{ fontWeight: 600, fontSize: '9px', letterSpacing: '.12em', textTransform: 'uppercase', color: 'rgba(216,233,239,.66)' }}>Japhet E. Velazquez</span>
-        </div>
-      </div>
+      {(() => {
+        const cName = { fontWeight: 600, fontSize: narrow ? '11px' : '9px', letterSpacing: '.12em', textTransform: 'uppercase', color: 'rgba(216,233,239,.72)' };
+        const cSep  = { fontWeight: 500, fontSize: narrow ? '9px'  : '7.5px', letterSpacing: '.16em', textTransform: 'uppercase', color: 'rgba(190,210,218,.42)' };
+        const cVal  = { fontWeight: 600, fontSize: narrow ? '11px' : '9px', letterSpacing: '.12em', textTransform: 'uppercase', color: 'rgba(216,233,239,.66)' };
+        return (
+          <div style={{ marginTop: 'clamp(34px,6vh,54px)', maxWidth: '880px', width: '100%', display: 'flex', flexDirection: 'column', gap: '7px', alignItems: 'center' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'baseline', gap: '4px 7px', lineHeight: 1.5 }}>
+              <span style={cName}>AFI Conservatory</span>
+              <span style={cSep}>presents</span>
+              <span style={cName}>&ldquo;The End Is At Hand&rdquo;</span>
+              <span style={cSep}>starring</span>
+              <span style={cName}>Efren Ramirez &middot; Richard Kind</span>
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'baseline', gap: '4px 7px', lineHeight: 1.5 }}>
+              <span style={cSep}>Music by</span>
+              <span style={cVal}>Alain Emile</span>
+              <span style={cSep}>Edited by</span>
+              <span style={cVal}>Junwu Tan</span>
+              <span style={cSep}>Production Design by</span>
+              <span style={cVal}>Yuheng Kuang</span>
+              <span style={cSep}>Cinematography by</span>
+              <span style={cVal}>Diana Dahllund</span>
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'baseline', gap: '4px 7px', lineHeight: 1.5 }}>
+              <span style={cSep}>Written &amp; Produced by</span>
+              <span style={cVal}>Sam Gallen</span>
+              <span style={cSep}>Directed by</span>
+              <span style={cVal}>Japhet E. Velazquez</span>
+            </div>
+          </div>
+        );
+      })()}
 
     </div>
   );
