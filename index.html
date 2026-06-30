@@ -296,6 +296,7 @@ function App() {
   const [narrow,     setNarrow]     = useState(() => window.innerWidth < 820);
   const [tick,       setTick]       = useState(0);
   const lastSection = useRef(null);
+  const swipeX = useRef(null);
   const REVEAL = new Date('2026-07-02T11:00:00-07:00').getTime();
 
   useEffect(() => {
@@ -332,6 +333,13 @@ function App() {
   const closeMedia = () => setMedia(null);
   const nextStill = () => setStillIdx(i => (i + 1) % STILLS.length);
   const prevStill = () => setStillIdx(i => (i - 1 + STILLS.length) % STILLS.length);
+  const onSwipeStart = (e) => { swipeX.current = e.touches[0].clientX; };
+  const onSwipeEnd   = (e) => {
+    if (swipeX.current === null) return;
+    const dx = e.changedTouches[0].clientX - swipeX.current;
+    if (Math.abs(dx) > 40) dx < 0 ? nextStill() : prevStill();
+    swipeX.current = null;
+  };
 
   /* layout geometry */
   const ease = 'cubic-bezier(0.22,0.61,0.36,1)';
@@ -498,7 +506,7 @@ function App() {
             </div>
           )}
           {media === 'stills' && (
-            <div style={{ position: 'absolute', inset: 0 }}>
+            <div style={{ position: 'absolute', inset: 0 }} onTouchStart={onSwipeStart} onTouchEnd={onSwipeEnd}>
               <div style={{ position: 'absolute', inset: 0, backgroundImage: `url("${STILLS[stillIdx]}")`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center' }} />
               <div onClick={nextStill} style={{ position: 'absolute', inset: 0, cursor: 'pointer', zIndex: 1 }} />
               <div onClick={prevStill} style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '32%', cursor: 'pointer', zIndex: 2 }} />
