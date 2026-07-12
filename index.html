@@ -108,7 +108,7 @@ const SECTIONS = {
     title: 'The Feature', titleCase: 'uppercase',
     lines: [
       'Writer-producer Sam Gallen has written the feature, developed in collaboration with director Japhet E. Velazquez.',
-      { before: 'We’re looking for the right collaborators to bring this one to life. If that’s you, we’d love to ', linkLabel: 'talk', linkTo: 'connect', after: '.' },
+      'We’re looking for the right collaborators to bring this one to life. If that’s you, we’d love to talk.',
     ],
   },
   connect: {
@@ -233,7 +233,7 @@ function CrewRow({ member, isOpen, onToggle }) {
 }
 
 /* ── DETAIL PANEL ─────────────────────────────────────── */
-function Detail({ section, onClose, narrow, onNavigate }) {
+function Detail({ section, onClose, narrow }) {
   const [openCrew, setOpenCrew] = useState(null);
 
   useEffect(() => { setOpenCrew(null); }, [section.id]);
@@ -267,15 +267,6 @@ function Detail({ section, onClose, narrow, onNavigate }) {
           if (line && typeof line === 'object' && line.signature) {
             return (
               <p key={i} style={{ fontWeight: 500, fontStyle: 'italic', fontSize: '15px', letterSpacing: '.02em', color: 'rgba(210,228,235,.85)', textAlign: 'right', marginTop: '32px', marginBottom: '15px' }}>{line.signature}</p>
-            );
-          }
-          if (line && typeof line === 'object' && line.linkLabel) {
-            return (
-              <p key={i} style={{ fontWeight: 300, fontSize: 'clamp(15px,1.7vw,17px)', lineHeight: 1.75, color: 'rgba(200,222,230,.7)', marginBottom: '15px', maxWidth: '60ch' }}>
-                {line.before}
-                <a onClick={() => onNavigate(line.linkTo)} style={{ color: '#6cb8d4', textDecoration: 'underline', cursor: 'pointer' }}>{line.linkLabel}</a>
-                {line.after}
-              </p>
             );
           }
           const segs = parseSegments(line);
@@ -558,7 +549,7 @@ function App() {
         {/* reading panel */}
         <div ref={panelRef} style={panelStyle}>
           {lastSection.current && (
-            <Detail section={section} onClose={closeSection} narrow={narrow} onNavigate={openSection} />
+            <Detail section={section} onClose={closeSection} narrow={narrow} />
           )}
         </div>
 
