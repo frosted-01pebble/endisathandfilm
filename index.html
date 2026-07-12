@@ -108,12 +108,8 @@ const SECTIONS = {
     title: 'The Feature', titleCase: 'uppercase',
     lines: [
       'Writer-producer Sam Gallen has **completed a polished, feature-length script**, developed in collaboration with director Japhet E. Velazquez.',
-      'We’re looking for the right collaborators to bring this one to life. If that’s you, we’d genuinely love to talk.',
+      { before: 'We’re looking for the right collaborators to bring this one to life. If that’s you, we’d love to ', linkLabel: 'talk', linkTo: 'connect', after: '.' },
     ],
-    contact: {
-      intro: 'For a link to the short and more information about the feature, please email:',
-      emails: [{ email: 'sam@isochronefilms.com' }],
-    },
   },
   connect: {
     id: 'connect', label: 'Contact',
@@ -125,8 +121,10 @@ const SECTIONS = {
     ],
     contact: {
       intro: 'We’d love to hear from you.',
-      emails: [{ label: 'Press & Festival Inquiries', email: 'endisathand.film@gmail.com' }],
-      outro: { before: 'Interested in learning more about the feature? Visit the ', linkLabel: 'Feature page', linkTo: 'feature', after: '.' },
+      emails: [
+        { label: 'Press & Festival Inquiries', email: 'endisathand.film@gmail.com' },
+        { label: 'Feature Inquiries', email: 'sam@isochronefilms.com' },
+      ],
     },
   },
 };
@@ -197,11 +195,11 @@ function EnvelopeIcon() {
 function WhyIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-      <rect x="2.5" y="10" width="4" height="7.5" rx="0.6" fill="none" stroke="#7cc6df" strokeWidth="1.4"/>
-      <path d="M6.5 11.2 C10 10.3,14.7 12.1,17.6 13.3 C18.7 13.7,18.6 15.1,17.3 15.1 C14.6 15.1,10.4 13.7,9 13.3" fill="none" stroke="#7cc6df" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M6.5 16.3 C10 17.5,14 17.2,17.5 15.5 C19.6 14.4,21 13.1,21.3 11.8 C21.6 10.6,20.3 9.9,19.3 10.7 C17.5 12,14 14.4,11 15" fill="none" stroke="#7cc6df" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M11.2 4.5 C11.2 3.2,12.3 2.4,13.5 2.4 C14.8 2.4,15.8 3.2,15.8 4.3 C15.8 5.5,14.6 5.8,14 6.5 C13.6 7,13.5 7.4,13.5 8" fill="none" stroke="#7cc6df" strokeWidth="1.4" strokeLinecap="round"/>
-      <circle cx="13.5" cy="9.7" r="0.55" fill="#7cc6df"/>
+      <rect x="2.5" y="10" width="4" height="7.5" rx="0.6" fill="none" stroke="#7cc6df" strokeWidth="1.1"/>
+      <path d="M6.5 11.2 C10 10.3,14.7 12.1,17.6 13.3 C18.7 13.7,18.6 15.1,17.3 15.1 C14.6 15.1,10.4 13.7,9 13.3" fill="none" stroke="#7cc6df" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M6.5 16.3 C10 17.5,14 17.2,17.5 15.5 C19.6 14.4,21 13.1,21.3 11.8 C21.6 10.6,20.3 9.9,19.3 10.7 C17.5 12,14 14.4,11 15" fill="none" stroke="#7cc6df" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M10.7 4.1 C10.7 2.6,12 1.6,13.5 1.6 C15.1 1.6,16.3 2.6,16.3 3.9 C16.3 5.4,14.8 5.8,14.1 6.6 C13.6 7.2,13.5 7.7,13.5 8.5" fill="none" stroke="#7cc6df" strokeWidth="1.9" strokeLinecap="round"/>
+      <circle cx="13.5" cy="10.6" r="0.75" fill="#7cc6df"/>
     </svg>
   );
 }
@@ -269,7 +267,16 @@ function Detail({ section, onClose, narrow, onNavigate }) {
           }
           if (line && typeof line === 'object' && line.signature) {
             return (
-              <p key={i} style={{ fontWeight: 500, fontStyle: 'italic', fontSize: '15px', letterSpacing: '.02em', color: 'rgba(210,228,235,.85)', textAlign: 'left', marginTop: '32px', marginBottom: '15px' }}>{line.signature}</p>
+              <p key={i} style={{ fontWeight: 500, fontStyle: 'italic', fontSize: '15px', letterSpacing: '.02em', color: 'rgba(210,228,235,.85)', textAlign: 'right', marginTop: '32px', marginBottom: '15px' }}>{line.signature}</p>
+            );
+          }
+          if (line && typeof line === 'object' && line.linkLabel) {
+            return (
+              <p key={i} style={{ fontWeight: 300, fontSize: 'clamp(15px,1.7vw,17px)', lineHeight: 1.75, color: 'rgba(200,222,230,.7)', marginBottom: '15px', maxWidth: '60ch' }}>
+                {line.before}
+                <a onClick={() => onNavigate(line.linkTo)} style={{ color: '#6cb8d4', textDecoration: 'underline', cursor: 'pointer' }}>{line.linkLabel}</a>
+                {line.after}
+              </p>
             );
           }
           const segs = parseSegments(line);
@@ -336,13 +343,6 @@ function Detail({ section, onClose, narrow, onNavigate }) {
                 <a href={`mailto:${c.email}`} style={{ fontWeight: 400, fontSize: 'clamp(15px,1.7vw,17px)', letterSpacing: '.02em', color: '#6cb8d4', textDecoration: 'none' }}>{c.email}</a>
               </div>
             ))}
-            {section.contact.outro && (
-              <p style={{ fontWeight: 300, fontSize: 'clamp(15px,1.7vw,17px)', lineHeight: 1.75, color: 'rgba(200,222,230,.7)', maxWidth: '60ch', marginTop: '4px', marginBottom: 0 }}>
-                {section.contact.outro.before}
-                <a onClick={() => onNavigate(section.contact.outro.linkTo)} style={{ color: '#6cb8d4', textDecoration: 'underline', cursor: 'pointer' }}>{section.contact.outro.linkLabel}</a>
-                {section.contact.outro.after}
-              </p>
-            )}
           </div>
         )}
       </div>
