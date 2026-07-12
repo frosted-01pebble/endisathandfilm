@@ -120,10 +120,10 @@ const SECTIONS = {
 };
 
 const NAV = [
-  { id: 'film',    label: 'About the Film', isEye: true,  isTeam: false, isArrow: false, isGlyph: false, glyph: null },
-  { id: 'team',    label: 'Meet the Team',  isEye: false, isTeam: true,  isArrow: false, isGlyph: false, glyph: '⋆⋆⋆⋆⋆' },
-  { id: 'feature', label: 'The Feature',    isEye: false, isTeam: false, isArrow: true,  isGlyph: false, glyph: '↗' },
-  { id: 'connect', label: 'Contact',        isEye: false, isTeam: false, isArrow: false, isGlyph: true,  glyph: '@' },
+  { id: 'film',    label: 'About the Film', isEye: true,  isTeam: false, isSlate: false, isGlyph: false, glyph: null },
+  { id: 'feature', label: 'The Feature',    isEye: false, isTeam: false, isSlate: true,  isGlyph: false, glyph: null },
+  { id: 'team',    label: 'Meet the Team',  isEye: false, isTeam: true,  isSlate: false, isGlyph: false, glyph: '⋆⋆⋆⋆⋆' },
+  { id: 'connect', label: 'Contact',        isEye: false, isTeam: false, isSlate: false, isGlyph: true,  glyph: '@' },
 ];
 
 /* ── HELPERS ──────────────────────────────────────────── */
@@ -160,11 +160,16 @@ function TeamIcon() {
     </svg>
   );
 }
-function ArrowIcon() {
+function SlateIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-      <line x1="5" y1="19" x2="19" y2="5" stroke="#7cc6df" strokeWidth="2" strokeLinecap="round"/>
-      <polyline points="9,5 19,5 19,15" fill="none" stroke="#7cc6df" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <rect x="3" y="10" width="18" height="11" rx="1.5" fill="#7cc6df"/>
+      <g transform="rotate(-8 12 6.5)">
+        <rect x="3" y="3.5" width="18" height="6" rx="1" fill="#7cc6df"/>
+        <rect x="6.2" y="3.5" width="2.6" height="6" fill="#0a1014"/>
+        <rect x="12" y="3.5" width="2.6" height="6" fill="#0a1014"/>
+        <rect x="17.8" y="3.5" width="2.6" height="6" fill="#0a1014"/>
+      </g>
     </svg>
   );
 }
@@ -442,7 +447,7 @@ function App() {
                         <span style={{ width: '34px', height: '34px', flexShrink: 0, borderRadius: '9px', background: 'rgba(108,184,212,.12)', border: '1px solid rgba(108,184,212,.32)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', color: '#7cc6df' }}>
                           {item.isEye && <EyeIcon />}
                           {item.isTeam && <TeamIcon />}
-                          {item.isArrow && <ArrowIcon />}
+                          {item.isSlate && <SlateIcon />}
                           {item.isGlyph && item.glyph}
                         </span>
                         <span style={{ flex: 1, minWidth: 0 }}>
