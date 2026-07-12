@@ -41,6 +41,17 @@ const STILLS = [
 ];
 
 const SECTIONS = {
+  why: {
+    id: 'why', label: 'The Why',
+    kicker: 'The Why',
+    lines: [
+      'As phones become more immersive and algorithms more addictive, our attention spans are being quietly and profoundly reshaped.',
+      { subheader: 'Director’s Statement' },
+      'I’ve always been drawn to horror that speaks to real fears, and right now one of the scariest things I’m seeing is how deeply our phones have rewired the way we live, think, and love each other. **The End Is at Hand** turns that anxiety into something you can see, touch, and be afraid of: a creature born from the very technology we can’t put down, brought to life through practical effects, real slime, real puppetry, real threat.',
+      'I was born in 2001, right on the edge of the digital shift. I remember playing outside, knocking on friends’ doors, being in the world. I’ve watched that kind of connection erode with every generation since, even in my own family, where a text has started to stand in for a visit. This film’s protagonist lives that same tension: a young man who loves his family fiercely and still needs to pull away from them to become himself.',
+      'To confront an extreme crisis, I believe we need extreme cinema. I hope this film is a shock to the system, the kind you feel in your body before you understand it in your head.',
+    ],
+  },
   film: {
     id: 'film', label: 'About the Film',
     kicker: 'An AFI Conservatory Thesis Film',
@@ -120,10 +131,11 @@ const SECTIONS = {
 };
 
 const NAV = [
-  { id: 'film',    label: 'About the Film', isEye: true,  isTeam: false, isSlate: false, isGlyph: false, glyph: null },
-  { id: 'feature', label: 'The Feature',    isEye: false, isTeam: false, isSlate: true,  isGlyph: false, glyph: null },
-  { id: 'team',    label: 'Meet the Team',  isEye: false, isTeam: true,  isSlate: false, isGlyph: false, glyph: '⋆⋆⋆⋆⋆' },
-  { id: 'connect', label: 'Contact',        isEye: false, isTeam: false, isSlate: false, isGlyph: true,  glyph: '@' },
+  { id: 'film',    label: 'About the Film', isEye: true,  isWhy: false, isTeam: false, isSlate: false, isEnvelope: false, isGlyph: false, glyph: null, badge: 'now' },
+  { id: 'why',     label: 'The Why',        isEye: false, isWhy: true,  isTeam: false, isSlate: false, isEnvelope: false, isGlyph: false, glyph: null, badge: 'now' },
+  { id: 'feature', label: 'The Feature',    isEye: false, isWhy: false, isTeam: false, isSlate: true,  isEnvelope: false, isGlyph: false, glyph: null, badge: 'next' },
+  { id: 'team',    label: 'Meet the Team',  isEye: false, isWhy: false, isTeam: true,  isSlate: false, isEnvelope: false, isGlyph: false, glyph: '⋆⋆⋆⋆⋆', badge: 'now' },
+  { id: 'connect', label: 'Contact',        isEye: false, isWhy: false, isTeam: false, isSlate: false, isEnvelope: true,  isGlyph: false, glyph: null, badge: 'now' },
 ];
 
 /* ── HELPERS ──────────────────────────────────────────── */
@@ -164,12 +176,31 @@ function SlateIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
       <rect x="3" y="10" width="18" height="11" rx="1.5" fill="#7cc6df"/>
-      <g transform="rotate(-8 12 6.5)">
-        <rect x="3" y="3.5" width="18" height="6" rx="1" fill="#7cc6df"/>
-        <rect x="6.2" y="3.5" width="2.6" height="6" fill="#0a1014"/>
-        <rect x="12" y="3.5" width="2.6" height="6" fill="#0a1014"/>
-        <rect x="17.8" y="3.5" width="2.6" height="6" fill="#0a1014"/>
+      <g transform="rotate(-8 12 7.25)">
+        <rect x="3" y="5" width="18" height="4.5" rx="1" fill="#7cc6df"/>
+        <rect x="6.2" y="5" width="2.6" height="4.5" fill="#0a1014"/>
+        <rect x="12" y="5" width="2.6" height="4.5" fill="#0a1014"/>
+        <rect x="17.8" y="5" width="2.6" height="4.5" fill="#0a1014"/>
       </g>
+    </svg>
+  );
+}
+function EnvelopeIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="2.5" y="5.5" width="19" height="13" rx="2" fill="#7cc6df"/>
+      <path d="M3.5 6.5 L12 13 L20.5 6.5" fill="none" stroke="#0a1014" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+function WhyIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="2.5" y="10" width="4" height="7.5" rx="0.6" fill="none" stroke="#7cc6df" strokeWidth="1.4"/>
+      <path d="M6.5 11.2 C10 10.3,14.7 12.1,17.6 13.3 C18.7 13.7,18.6 15.1,17.3 15.1 C14.6 15.1,10.4 13.7,9 13.3" fill="none" stroke="#7cc6df" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M6.5 16.3 C10 17.5,14 17.2,17.5 15.5 C19.6 14.4,21 13.1,21.3 11.8 C21.6 10.6,20.3 9.9,19.3 10.7 C17.5 12,14 14.4,11 15" fill="none" stroke="#7cc6df" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M11.2 4.5 C11.2 3.2,12.3 2.4,13.5 2.4 C14.8 2.4,15.8 3.2,15.8 4.3 C15.8 5.5,14.6 5.8,14 6.5 C13.6 7,13.5 7.4,13.5 8" fill="none" stroke="#7cc6df" strokeWidth="1.4" strokeLinecap="round"/>
+      <circle cx="13.5" cy="9.7" r="0.55" fill="#7cc6df"/>
     </svg>
   );
 }
@@ -222,10 +253,17 @@ function Detail({ section, onClose, narrow }) {
       {/* scrollable body */}
       <div style={{ ...(narrow ? {} : { flex: 1, overflowY: 'auto' }), padding: '34px clamp(22px,4vw,40px) 40px' }}>
         <div style={{ fontWeight: 600, fontSize: '10px', letterSpacing: '.28em', textTransform: 'uppercase', color: '#6cb8d4', marginBottom: '18px' }}>{section.kicker}</div>
-        <div style={{ fontWeight: 600, fontSize: 'clamp(32px,5vw,48px)', lineHeight: 1.0, letterSpacing: '.02em', whiteSpace: 'pre-line', color: '#d8eef4', textShadow: '0 0 24px rgba(108,184,212,.45)', marginBottom: '24px', textTransform: section.titleCase }}>{section.title}</div>
+        {section.title && (
+          <div style={{ fontWeight: 600, fontSize: 'clamp(32px,5vw,48px)', lineHeight: 1.0, letterSpacing: '.02em', whiteSpace: 'pre-line', color: '#d8eef4', textShadow: '0 0 24px rgba(108,184,212,.45)', marginBottom: '24px', textTransform: section.titleCase }}>{section.title}</div>
+        )}
 
         {/* body lines */}
         {lines.map((line, i) => {
+          if (line && typeof line === 'object' && line.subheader) {
+            return (
+              <div key={i} style={{ fontWeight: 600, fontSize: '10px', letterSpacing: '.24em', textTransform: 'uppercase', color: '#6cb8d4', marginTop: '6px', marginBottom: '14px' }}>{line.subheader}</div>
+            );
+          }
           const segs = parseSegments(line);
           return (
             <p key={i} style={{ fontWeight: 300, fontSize: 'clamp(15px,1.7vw,17px)', lineHeight: 1.75, color: 'rgba(200,222,230,.7)', marginBottom: '15px', maxWidth: '60ch' }}>
@@ -446,14 +484,16 @@ function App() {
                       <button key={item.id} onClick={() => openSection(item.id)} style={{ display: 'flex', alignItems: 'center', gap: '11px', borderRadius: '16px', cursor: 'pointer', padding: '11px 12px', textAlign: 'left', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', transition: 'border-color .3s,background .3s', background: on ? 'rgba(108,184,212,.13)' : 'rgba(10,16,20,.62)', border: on ? '1px solid rgba(124,198,223,.42)' : '1px solid rgba(140,190,210,.16)', boxShadow: 'none', opacity: on ? .92 : 1 }}>
                         <span style={{ width: '34px', height: '34px', flexShrink: 0, borderRadius: '9px', background: 'rgba(108,184,212,.12)', border: '1px solid rgba(108,184,212,.32)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', color: '#7cc6df' }}>
                           {item.isEye && <EyeIcon />}
+                          {item.isWhy && <WhyIcon />}
                           {item.isTeam && <TeamIcon />}
                           {item.isSlate && <SlateIcon />}
+                          {item.isEnvelope && <EnvelopeIcon />}
                           {item.isGlyph && item.glyph}
                         </span>
                         <span style={{ flex: 1, minWidth: 0 }}>
                           <span style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                             <span style={{ fontWeight: 600, fontSize: '9px', letterSpacing: '.16em', textTransform: 'uppercase', color: '#cfe2ea' }}>{item.label}</span>
-                            <span style={{ fontWeight: 400, fontSize: '8px', letterSpacing: '.08em', textTransform: 'uppercase', color: 'rgba(200,222,230,.4)' }}>now</span>
+                            <span style={{ fontWeight: 400, fontSize: '8px', letterSpacing: '.08em', textTransform: 'uppercase', color: 'rgba(200,222,230,.4)' }}>{item.badge}</span>
                           </span>
                         </span>
                       </button>
