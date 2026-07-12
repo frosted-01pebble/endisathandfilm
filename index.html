@@ -43,13 +43,12 @@ const STILLS = [
 const SECTIONS = {
   why: {
     id: 'why', label: 'The Why',
-    kicker: 'The Why',
     lines: [
-      'As phones become more immersive and algorithms more addictive, our attention spans are being quietly and profoundly reshaped.',
-      { subheader: 'Director’s Statement' },
+      { emphasis: 'As phones become more immersive and algorithms more addictive, our attention spans are being quietly and profoundly reshaped.' },
       'I’ve always been drawn to horror that speaks to real fears, and right now one of the scariest things I’m seeing is how deeply our phones have rewired the way we live, think, and love each other. **The End Is at Hand** turns that anxiety into something you can see, touch, and be afraid of: a creature born from the very technology we can’t put down, brought to life through practical effects, real slime, real puppetry, real threat.',
       'I was born in 2001, right on the edge of the digital shift. I remember playing outside, knocking on friends’ doors, being in the world. I’ve watched that kind of connection erode with every generation since, even in my own family, where a text has started to stand in for a visit. This film’s protagonist lives that same tension: a young man who loves his family fiercely and still needs to pull away from them to become himself.',
       'To confront an extreme crisis, I believe we need extreme cinema. I hope this film is a shock to the system, the kind you feel in your body before you understand it in your head.',
+      { signature: 'Japhet E. Velazquez' },
     ],
   },
   film: {
@@ -243,25 +242,32 @@ function Detail({ section, onClose, narrow }) {
   const lines = section.lines || [];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', ...(narrow ? {} : { height: '100%' }), background: '#000', color: '#cfe2ea', fontFamily: "'Montserrat',sans-serif" }}>
+    <div style={{ display: 'flex', flexDirection: 'column', background: '#000', color: '#cfe2ea', fontFamily: "'Montserrat',sans-serif" }}>
       {/* top bar */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 18px', borderBottom: '1px solid rgba(140,190,210,.14)', flexShrink: 0, ...(narrow ? { position: 'sticky', top: 0, zIndex: 10, background: '#000' } : {}) }}>
         <button onClick={onClose} style={{ fontWeight: 600, fontSize: '9px', letterSpacing: '.22em', color: '#6cb8d4', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textTransform: 'uppercase' }}>&larr; Back</button>
         <span style={{ fontWeight: 500, fontSize: '8.5px', letterSpacing: '.26em', textTransform: 'uppercase', color: 'rgba(200,222,230,.4)' }}>{section.label}</span>
       </div>
 
-      {/* scrollable body */}
-      <div style={{ ...(narrow ? {} : { flex: 1, overflowY: 'auto' }), padding: '34px clamp(22px,4vw,40px) 40px' }}>
-        <div style={{ fontWeight: 600, fontSize: '10px', letterSpacing: '.28em', textTransform: 'uppercase', color: '#6cb8d4', marginBottom: '18px' }}>{section.kicker}</div>
+      {/* body */}
+      <div style={{ padding: '34px clamp(22px,4vw,40px) 40px' }}>
+        {section.kicker && (
+          <div style={{ fontWeight: 600, fontSize: '10px', letterSpacing: '.28em', textTransform: 'uppercase', color: '#6cb8d4', marginBottom: '18px' }}>{section.kicker}</div>
+        )}
         {section.title && (
           <div style={{ fontWeight: 600, fontSize: 'clamp(32px,5vw,48px)', lineHeight: 1.0, letterSpacing: '.02em', whiteSpace: 'pre-line', color: '#d8eef4', textShadow: '0 0 24px rgba(108,184,212,.45)', marginBottom: '24px', textTransform: section.titleCase }}>{section.title}</div>
         )}
 
         {/* body lines */}
         {lines.map((line, i) => {
-          if (line && typeof line === 'object' && line.subheader) {
+          if (line && typeof line === 'object' && line.emphasis) {
             return (
-              <div key={i} style={{ fontWeight: 600, fontSize: '10px', letterSpacing: '.24em', textTransform: 'uppercase', color: '#6cb8d4', marginTop: '6px', marginBottom: '14px' }}>{line.subheader}</div>
+              <p key={i} style={{ fontWeight: 700, fontSize: 'clamp(15px,1.7vw,17px)', lineHeight: 1.75, color: '#7cc6df', marginBottom: '15px', maxWidth: '60ch' }}>{line.emphasis}</p>
+            );
+          }
+          if (line && typeof line === 'object' && line.signature) {
+            return (
+              <p key={i} style={{ fontWeight: 500, fontStyle: 'italic', fontSize: '15px', letterSpacing: '.02em', color: 'rgba(210,228,235,.85)', textAlign: 'left', marginTop: '32px', marginBottom: '15px' }}>{line.signature}</p>
             );
           }
           const segs = parseSegments(line);
@@ -344,6 +350,8 @@ function App() {
   const [tick,       setTick]       = useState(0);
   const lastSection = useRef(null);
   const swipeX = useRef(null);
+  const panelRef = useRef(null);
+  const [panelHeight, setPanelHeight] = useState(648);
   const REVEAL = new Date('2026-07-02T11:00:00-07:00').getTime();
 
   useEffect(() => {
@@ -362,6 +370,12 @@ function App() {
   if (active) lastSection.current = SECTIONS[active];
   const section = active ? SECTIONS[active] : lastSection.current;
   const open = !!active;
+
+  useEffect(() => {
+    if (!narrow && open && panelRef.current) {
+      setPanelHeight(panelRef.current.scrollHeight);
+    }
+  }, [open, section, narrow]);
 
   const openSection = (id) => {
     setActive(p => p === id ? null : id);
@@ -397,9 +411,10 @@ function App() {
     phoneWrapStyle= { position: 'absolute', top: 0, left: '50%', transformOrigin: 'top center', transition: `${trans}, opacity 0.4s ${ease}`, transform: open ? 'translateX(-50%) scale(0.82)' : 'translateX(-50%) scale(1)', opacity: open ? 0 : 1, pointerEvents: open ? 'none' : 'auto' };
     panelStyle    = { position: open ? 'relative' : 'absolute', ...(open ? {} : { inset: 0 }), transition: `opacity 0.5s ${ease}`, opacity: open ? 1 : 0, pointerEvents: open ? 'auto' : 'none' };
   } else {
-    stageStyle    = { position: 'relative', width: '100%', maxWidth: '1060px', margin: '0 auto', height: '648px' };
+    const wideOpenHeight = Math.max(648, panelHeight);
+    stageStyle    = { position: 'relative', width: '100%', maxWidth: '1060px', margin: '0 auto', height: (open ? wideOpenHeight : 648) + 'px', transition: `height 0.3s ${ease}` };
     phoneWrapStyle= { position: 'absolute', top: 0, transformOrigin: 'top left', transition: trans, left: open ? '8px' : '50%', transform: open ? 'translateX(0) scale(0.78)' : 'translateX(-50%) scale(1)' };
-    panelStyle    = { position: 'absolute', top: 0, left: '296px', right: 0, height: '648px', transition: `opacity 0.55s ${ease}, transform 0.55s ${ease}`, opacity: open ? 1 : 0, transform: open ? 'translateX(0)' : 'translateX(30px)', pointerEvents: open ? 'auto' : 'none' };
+    panelStyle    = { position: 'absolute', top: 0, left: '296px', right: 0, height: open ? 'auto' : '648px', transition: `opacity 0.55s ${ease}, transform 0.55s ${ease}`, opacity: open ? 1 : 0, transform: open ? 'translateX(0)' : 'translateX(30px)', pointerEvents: open ? 'auto' : 'none' };
   }
 
   const mediaOnPhone = !!media && !narrow;
@@ -508,7 +523,7 @@ function App() {
               </div>
 
               {/* trailer button */}
-              <div onClick={openTrailer} style={{ position: 'absolute', left: '30px', bottom: '74px', zIndex: 5, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+              <div onClick={openTrailer} style={{ position: 'absolute', left: '30px', bottom: '56px', zIndex: 5, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
                 <div style={{ width: '46px', height: '46px', borderRadius: '50%', background: 'rgba(108,184,212,.12)', border: '1px solid rgba(108,184,212,.32)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5 L19 12 L8 19 Z" fill="#7cc6df"/></svg>
                 </div>
@@ -516,7 +531,7 @@ function App() {
               </div>
 
               {/* stills button */}
-              <div style={{ position: 'absolute', right: '30px', bottom: '74px', zIndex: 5, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
+              <div style={{ position: 'absolute', right: '30px', bottom: '56px', zIndex: 5, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
                 <div onClick={openStills} style={{ width: '46px', height: '46px', borderRadius: '50%', background: 'rgba(108,184,212,.12)', border: '1px solid rgba(108,184,212,.32)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                   <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
                     <rect x="2" y="7" width="20" height="13" rx="3" fill="#7cc6df"/>
@@ -533,7 +548,7 @@ function App() {
         </div>{/* /phone wrapper */}
 
         {/* reading panel */}
-        <div style={panelStyle}>
+        <div ref={panelRef} style={panelStyle}>
           {lastSection.current && (
             <Detail section={section} onClose={closeSection} narrow={narrow} />
           )}
