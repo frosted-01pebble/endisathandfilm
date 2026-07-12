@@ -108,7 +108,7 @@ const SECTIONS = {
     title: 'The Feature', titleCase: 'uppercase',
     lines: [
       'Writer-producer Sam Gallen has **completed a polished, feature-length script**, developed in collaboration with director Japhet E. Velazquez.',
-      "Interested in reading the feature? Producers, financiers, and collaborators — we’d love to connect.",
+      'We’re looking for the right collaborators to bring this one to life. If that’s you, we’d genuinely love to talk.',
     ],
     contact: {
       intro: 'For a link to the short and more information about the feature, please email:',
@@ -124,7 +124,9 @@ const SECTIONS = {
       { label: 'Letterboxd', note: 'Add to Watchlist',   href: 'https://letterboxd.com/film/the-end-is-at-hand/' },
     ],
     contact: {
-      emails: [{ label: 'Press · Programming', email: 'endisathand.film@gmail.com' }],
+      intro: 'We’d love to hear from you.',
+      emails: [{ label: 'Press & Festival Inquiries', email: 'endisathand.film@gmail.com' }],
+      outro: { before: 'Interested in learning more about the feature? Visit the ', linkLabel: 'Feature page', linkTo: 'feature', after: '.' },
     },
   },
 };
@@ -234,7 +236,7 @@ function CrewRow({ member, isOpen, onToggle }) {
 }
 
 /* ── DETAIL PANEL ─────────────────────────────────────── */
-function Detail({ section, onClose, narrow }) {
+function Detail({ section, onClose, narrow, onNavigate }) {
   const [openCrew, setOpenCrew] = useState(null);
 
   useEffect(() => { setOpenCrew(null); }, [section.id]);
@@ -334,6 +336,13 @@ function Detail({ section, onClose, narrow }) {
                 <a href={`mailto:${c.email}`} style={{ fontWeight: 400, fontSize: 'clamp(15px,1.7vw,17px)', letterSpacing: '.02em', color: '#6cb8d4', textDecoration: 'none' }}>{c.email}</a>
               </div>
             ))}
+            {section.contact.outro && (
+              <p style={{ fontWeight: 300, fontSize: 'clamp(15px,1.7vw,17px)', lineHeight: 1.75, color: 'rgba(200,222,230,.7)', maxWidth: '60ch', marginTop: '4px', marginBottom: 0 }}>
+                {section.contact.outro.before}
+                <a onClick={() => onNavigate(section.contact.outro.linkTo)} style={{ color: '#6cb8d4', textDecoration: 'underline', cursor: 'pointer' }}>{section.contact.outro.linkLabel}</a>
+                {section.contact.outro.after}
+              </p>
+            )}
           </div>
         )}
       </div>
@@ -550,7 +559,7 @@ function App() {
         {/* reading panel */}
         <div ref={panelRef} style={panelStyle}>
           {lastSection.current && (
-            <Detail section={section} onClose={closeSection} narrow={narrow} />
+            <Detail section={section} onClose={closeSection} narrow={narrow} onNavigate={openSection} />
           )}
         </div>
 
