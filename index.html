@@ -11,20 +11,29 @@
 <meta property="og:title" content="The End Is at Hand">
 <meta property="og:description" content="After hours at a cell phone repair shop, a routine fix takes a strange turn. A horror short film starring Efren Ramirez and Richard Kind, from AFI Conservatory.">
 <meta property="og:url" content="https://endisathandfilm.com/">
-<meta property="og:image" content="https://endisathandfilm.com/project/assets/poster.jpg">
+<meta property="og:image" content="https://endisathandfilm.com/project/assets/search-16x9.jpg">
+<meta property="og:image:width" content="1920">
+<meta property="og:image:height" content="1080">
+<meta property="og:image:alt" content="The End Is at Hand — key art: a hand holding a phone with a face glowing on the screen.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="The End Is at Hand">
 <meta name="twitter:description" content="After hours at a cell phone repair shop, a routine fix takes a strange turn. A horror short film starring Efren Ramirez and Richard Kind, from AFI Conservatory.">
-<meta name="twitter:image" content="https://endisathandfilm.com/project/assets/poster.jpg">
+<meta name="twitter:image" content="https://endisathandfilm.com/project/assets/search-16x9.jpg">
+<meta name="twitter:image:alt" content="The End Is at Hand — key art: a hand holding a phone with a face glowing on the screen.">
+<meta name="thumbnail" content="https://endisathandfilm.com/project/assets/search-1x1.jpg">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Movie",
   "name": "The End Is At Hand",
   "url": "https://endisathandfilm.com/",
-  "image": "https://endisathandfilm.com/project/assets/poster.jpg",
+  "image": [
+    "https://endisathandfilm.com/project/assets/search-1x1.jpg",
+    "https://endisathandfilm.com/project/assets/search-4x3.jpg",
+    "https://endisathandfilm.com/project/assets/search-16x9.jpg"
+  ],
   "description": "After hours at a cell phone repair shop, a routine fix takes a strange turn. A horror short film starring Efren Ramirez and Richard Kind, from AFI Conservatory.",
-  "genre": "Horror",
+  "genre": ["Horror", "Body Horror", "Sci-Fi"],
   "duration": "PT9M54S",
   "inLanguage": "en",
   "countryOfOrigin": { "@type": "Country", "name": "USA" },
@@ -37,15 +46,7 @@
   "editor": { "@type": "Person", "name": "Junwu Tan" },
   "musicBy": { "@type": "Person", "name": "Alain Emile" },
   "productionCompany": { "@type": "Organization", "name": "AFI Conservatory" },
-  "trailer": {
-    "@type": "VideoObject",
-    "name": "THE END IS AT HAND | Teaser Trailer",
-    "description": "Teaser trailer for The End Is at Hand.",
-    "thumbnailUrl": "https://endisathandfilm.com/project/assets/poster.jpg",
-    "uploadDate": "2026-07-13T15:27:29-07:00",
-    "duration": "PT38S",
-    "embedUrl": "https://www.youtube.com/embed/dQB1rpAa5M4"
-  },
+  "subjectOf": { "@type": "WebPage", "url": "https://endisathandfilm.com/trailer/" },
   "sameAs": [
     "https://www.imdb.com/title/tt33039059/",
     "https://letterboxd.com/film/the-end-is-at-hand/",
@@ -71,10 +72,27 @@ body{-webkit-font-smoothing:antialiased}
 ::-webkit-scrollbar-thumb{background:rgba(120,180,205,0.25)}
 @keyframes teiahHalo{0%,100%{opacity:.5}50%{opacity:.72}}
 button{font-family:'Montserrat',sans-serif}
+/* pre-render fallback: on-brand holding state while Babel compiles; React replaces it */
+#prerender{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:40px 24px;text-align:center;font-family:'Montserrat',sans-serif;color:rgba(200,222,230,.55);font-size:12px;letter-spacing:.06em;line-height:1.8}
+#prerender img{width:min(300px,62vw);height:auto;display:block}
+#prerender h1{margin:0;font-weight:300;font-size:clamp(18px,3.2vw,26px);letter-spacing:.14em;text-transform:uppercase;color:#a9d6e6}
+#prerender .pr-logline{margin:0;text-transform:uppercase;letter-spacing:.16em;color:#6cb8d4}
+#prerender p{margin:0;max-width:60ch}
+#prerender a{color:#6cb8d4}
 </style>
 </head>
 <body>
-<div id="root"></div>
+<div id="root"><!-- Crawlable/no-JS fallback. React's createRoot() replaces this on mount. -->
+<div id="prerender">
+  <img src="project/assets/search-1x1.jpg" width="1200" height="1200"
+       alt="The End Is at Hand — horror short film key art: a hand holding a phone with a face glowing on the screen." />
+  <h1>The End Is at Hand</h1>
+  <p class="pr-logline">After hours at a cell phone repair shop, a routine fix takes a strange turn.</p>
+  <p>A horror short film starring <strong>Efren Ramirez</strong> and <strong>Richard Kind</strong>, written and produced by Sam Gallen, directed by Japhet E. Velázquez. An AFI Conservatory thesis film.</p>
+  <p>Official Selection: Palm Springs International ShortFest 2026 · Fantasia 2026 · HollyShorts 2026.</p>
+  <p><a href="trailer/">Watch the teaser trailer</a></p>
+</div>
+</div>
 
 <script type="text/babel" data-presets="react">
 const { useState, useEffect, useRef } = React;
