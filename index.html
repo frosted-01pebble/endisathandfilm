@@ -88,7 +88,7 @@ button{font-family:'Montserrat',sans-serif}
   <h1>The End Is at Hand</h1>
   <p class="pr-logline">After hours at a cell phone repair shop, a routine fix takes a strange turn.</p>
   <p>A horror short film starring <strong>Efren Ramirez</strong> and <strong>Richard Kind</strong>, written and produced by Sam Gallen, directed by Japhet E. Velázquez. An AFI Conservatory thesis film.</p>
-  <p>Official Selection: Palm Springs International ShortFest 2026 · Fantasia 2026 · HollyShorts 2026.</p>
+  <p>Official Selection: Palm Springs International ShortFest 2026 · Fantasia 2026 · PROOF Film Festival 2026 · Celluloid Screams 2026 · HollyShorts 2026 · Austin Horror Film Festival 2026.</p>
   <p><a href="https://www.youtube.com/watch?v=dQB1rpAa5M4">Watch the teaser trailer</a></p>
 </div>
 </div>
@@ -658,19 +658,26 @@ function App() {
       {/* laurels */}
       <div style={{ marginTop: 'clamp(30px,5vh,44px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
         <div style={{ fontWeight: 600, fontSize: '9px', letterSpacing: '.3em', textTransform: 'uppercase', color: 'rgba(200,222,230,.4)' }}>Official Selection</div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'clamp(26px,4vw,52px)', flexWrap: 'wrap' }}>
-          <img src="project/assets/laurel-shortfest.png" alt="Palm Springs International ShortFest 2026" style={{ height: '84px', width: 'auto', opacity: .9 }} />
-          <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', height: '84px' }}>
-            <img src="project/assets/laurel-fantasia.png" alt="Fantasia 2026 — Official Selection" style={{ height: '48px', width: 'auto', opacity: .9, display: 'block' }} />
-            {countdownOn && (
-              <div style={{ position: 'absolute', inset: narrow ? '-2px 0' : '-2px -24px', background: '#f4f1ea', borderRadius: '3px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '5px', padding: narrow ? '8px 10px' : '8px 16px', boxShadow: '0 3px 16px rgba(0,0,0,.45)' }}>
-                <div style={{ fontWeight: 600, fontSize: '7px', letterSpacing: '.2em', textTransform: 'uppercase', color: '#5a6b73', textAlign: 'center', lineHeight: 1.5 }}>Special Announcement<br/>Coming Soon</div>
-                <div style={{ fontWeight: 700, fontSize: '13px', letterSpacing: '.05em', color: '#0d141a', fontVariantNumeric: 'tabular-nums' }}>{countdown}</div>
-              </div>
-            )}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '22px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'clamp(26px,4vw,52px)', flexWrap: 'wrap' }}>
+            <img src="project/assets/laurel-shortfest.png" alt="Palm Springs International ShortFest 2026" style={{ height: '84px', width: 'auto', opacity: .9 }} />
+            <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', height: '84px' }}>
+              <img src="project/assets/laurel-fantasia.png" alt="Fantasia 2026 — Official Selection" style={{ height: '48px', width: 'auto', opacity: .9, display: 'block' }} />
+              {countdownOn && (
+                <div style={{ position: 'absolute', inset: narrow ? '-2px 0' : '-2px -24px', background: '#f4f1ea', borderRadius: '3px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '5px', padding: narrow ? '8px 10px' : '8px 16px', boxShadow: '0 3px 16px rgba(0,0,0,.45)' }}>
+                  <div style={{ fontWeight: 600, fontSize: '7px', letterSpacing: '.2em', textTransform: 'uppercase', color: '#5a6b73', textAlign: 'center', lineHeight: 1.5 }}>Special Announcement<br/>Coming Soon</div>
+                  <div style={{ fontWeight: 700, fontSize: '13px', letterSpacing: '.05em', color: '#0d141a', fontVariantNumeric: 'tabular-nums' }}>{countdown}</div>
+                </div>
+              )}
+            </div>
+            <img src="project/assets/laurel-proof.png" alt="PROOF Film Festival at the American Cinematheque — Official Selection 2026" style={{ height: '84px', width: 'auto', opacity: .9 }} />
           </div>
-          <img src="project/assets/laurel-hollyshorts.png" alt="HollyShorts Film Festival — Official Selection 2026" style={{ height: '70px', width: 'auto', opacity: .9 }} />
-          <img src="project/assets/laurel-proof.png" alt="PROOF Film Festival at the American Cinematheque — Official Selection 2026" style={{ height: '84px', width: 'auto', opacity: .9 }} />
+          {/* second row columns sit under the first: +27px gap pins Celluloid to ShortFest, +22px on Austin pins it to PROOF, the -11px shift pins HollyShorts to Fantasia */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: narrow ? 'clamp(26px,4vw,52px)' : 'calc(clamp(26px,4vw,52px) + 27px)', flexWrap: 'wrap', transform: narrow ? 'none' : 'translateX(-11px)' }}>
+            <img src="project/assets/laurel-celluloidscreams.png" alt="Celluloid Screams: Sheffield Horror Film Festival — Official Selection 2026" style={{ height: '58px', width: 'auto', opacity: .9 }} />
+            <img src="project/assets/laurel-hollyshorts.png" alt="HollyShorts Film Festival — Official Selection 2026" style={{ height: '58px', width: 'auto', opacity: .9 }} />
+            <img src="project/assets/laurel-austinhorror.png" alt="Austin Horror Film Festival — Official Selection 2026" style={{ height: '60px', width: 'auto', opacity: .9, marginLeft: narrow ? 0 : '22px' }} />
+          </div>
         </div>
       </div>
 
